@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Entity\Base\AbstractEntity;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,14 +53,14 @@ class ApartmentSlotReservation extends AbstractEntity
     protected $updatedAt = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations")
-     * @ORM\JoinColumn(name="apartment_slot_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations", cascade={"persist"})
+     * @ORM\JoinColumn(name="apartment_slot_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $slot;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $user;
 

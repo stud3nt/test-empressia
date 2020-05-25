@@ -9,7 +9,7 @@ abstract class AbstractEntity
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", length=8, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", length=10, nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

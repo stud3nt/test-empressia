@@ -85,7 +85,7 @@ class User extends AbstractEntity implements UserInterface
     protected $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentSlotReservation", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentSlotReservation", mappedBy="user", cascade={"persist"})
      */
     protected $reservations;
 

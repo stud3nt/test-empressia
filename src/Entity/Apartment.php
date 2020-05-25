@@ -14,19 +14,22 @@ use Doctrine\ORM\Mapping as ORM;
 class Apartment extends AbstractEntity
 {
     /**
+     * @var string
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     protected $name;
 
     /**
+     * @var string
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description = null;
 
     /**
-     * @ORM\Column(name="day_slot_price", type="decimal", precision=7, scale=2, options={"default":0.00})
+     * @var int
+     * @ORM\Column(name="slot_day_price", type="decimal", precision=7, scale=2, options={"default":0.00})
      */
-    protected $daySlotPrice = 0;
+    protected $slotDayPrice = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ApartmentSlot", mappedBy="apartment")
@@ -72,18 +75,6 @@ class Apartment extends AbstractEntity
         return $this;
     }
 
-    public function getDaySlotPrice(): ?string
-    {
-        return $this->daySlotPrice;
-    }
-
-    public function setDaySlotPrice(string $daySlotPrice): self
-    {
-        $this->daySlotPrice = $daySlotPrice;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -123,6 +114,18 @@ class Apartment extends AbstractEntity
                 $slot->setApartment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlotDayPrice(): ?string
+    {
+        return $this->slotDayPrice;
+    }
+
+    public function setSlotDayPrice(string $slotDayPrice): self
+    {
+        $this->slotDayPrice = $slotDayPrice;
 
         return $this;
     }

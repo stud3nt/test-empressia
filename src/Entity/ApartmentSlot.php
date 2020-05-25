@@ -36,8 +36,8 @@ class ApartmentSlot extends AbstractEntity
     protected $updatedAt = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Apartment", inversedBy="slots")
-     * @ORM\JoinColumn(name="apartment_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Apartment", inversedBy="slots", cascade={"persist"})
+     * @ORM\JoinColumn(name="apartment_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $apartment;
 
