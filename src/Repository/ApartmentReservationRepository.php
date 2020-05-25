@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ApartmentSlot;
+use App\Entity\ApartmentReservation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ApartmentSlot|null find($id, $lockMode = null, $lockVersion = null)
- * @method ApartmentSlot|null findOneBy(array $criteria, array $orderBy = null)
- * @method ApartmentSlot[]    findAll()
- * @method ApartmentSlot[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ApartmentReservation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ApartmentReservation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ApartmentReservation[]    findAll()
+ * @method ApartmentReservation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ApartmentSlotRepository extends ServiceEntityRepository
+class ApartmentReservationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ApartmentSlot::class);
+        parent::__construct($registry, ApartmentReservation::class);
     }
 
     // /**
-    //  * @return ApartmentSlot[] Returns an array of ApartmentSlot objects
+    //  * @return ApartmentReservation[] Returns an array of ApartmentReservation objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ApartmentSlotRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ApartmentSlot
+    public function findOneBySomeField($value): ?ApartmentReservation
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

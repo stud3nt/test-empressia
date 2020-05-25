@@ -85,7 +85,7 @@ class User extends AbstractEntity implements UserInterface
     protected $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentSlotReservation", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentReservation", mappedBy="user", cascade={"persist"})
      */
     protected $reservations;
 
@@ -247,14 +247,14 @@ class User extends AbstractEntity implements UserInterface
     }
 
     /**
-     * @return Collection|ApartmentSlotReservation[]
+     * @return Collection|ApartmentReservation[]
      */
     public function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function addReservation(ApartmentSlotReservation $reservation): self
+    public function addReservation(ApartmentReservation $reservation): self
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations[] = $reservation;
@@ -264,7 +264,7 @@ class User extends AbstractEntity implements UserInterface
         return $this;
     }
 
-    public function removeReservation(ApartmentSlotReservation $reservation): self
+    public function removeReservation(ApartmentReservation $reservation): self
     {
         if ($this->reservations->contains($reservation)) {
             $this->reservations->removeElement($reservation);

@@ -26,15 +26,21 @@ class Apartment extends AbstractEntity
     protected $description = null;
 
     /**
-     * @var int
+     * @var float
      * @ORM\Column(name="slot_day_price", type="decimal", precision=7, scale=2, options={"default":0.00})
      */
     protected $slotDayPrice = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentSlot", mappedBy="apartment")
+     * @var int
+     * @ORM\Column(name="slots_count", type="integer", options={"default":1})
      */
-    protected $slots;
+    protected $slotsCount = 1;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ApartmentReservation", mappedBy="apartment")
+     */
+    protected $reservations;
 
     /**
      * @var \DateTime
@@ -48,7 +54,7 @@ class Apartment extends AbstractEntity
             $this->createdAt = new \DateTime();
         }
 
-        $this->slots = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -75,6 +81,30 @@ class Apartment extends AbstractEntity
         return $this;
     }
 
+    public function getSlotDayPrice(): ?string
+    {
+        return $this->slotDayPrice;
+    }
+
+    public function setSlotDayPrice(string $slotDayPrice): self
+    {
+        $this->slotDayPrice = $slotDayPrice;
+
+        return $this;
+    }
+
+    public function getSlotsCount(): ?int
+    {
+        return $this->slotsCount;
+    }
+
+    public function setSlotsCount(int $slotsCount): self
+    {
+        $this->slotsCount = $slotsCount;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -88,44 +118,32 @@ class Apartment extends AbstractEntity
     }
 
     /**
-     * @return Collection|ApartmentSlot[]
+     * @return Collection|ApartmentReservation[]
      */
-    public function getSlots(): Collection
+    public function getReservations(): Collection
     {
-        return $this->slots;
+        return $this->reservations;
     }
 
-    public function addSlot(ApartmentSlot $slot): self
+    public function addReservation(ApartmentReservation $reservation): self
     {
-        if (!$this->slots->contains($slot)) {
-            $this->slots[] = $slot;
-            $slot->setApartment($this);
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setApartment($this);
         }
 
         return $this;
     }
 
-    public function removeSlot(ApartmentSlot $slot): self
+    public function removeReservation(ApartmentReservation $reservation): self
     {
-        if ($this->slots->contains($slot)) {
-            $this->slots->removeElement($slot);
+        if ($this->reservations->contains($reservation)) {
+            $this->reservations->removeElement($reservation);
             // set the owning side to null (unless already changed)
-            if ($slot->getApartment() === $this) {
-                $slot->setApartment(null);
+            if ($reservation->getApartment() === $this) {
+                $reservation->setApartment(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSlotDayPrice(): ?string
-    {
-        return $this->slotDayPrice;
-    }
-
-    public function setSlotDayPrice(string $slotDayPrice): self
-    {
-        $this->slotDayPrice = $slotDayPrice;
 
         return $this;
     }

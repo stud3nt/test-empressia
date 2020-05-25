@@ -6,10 +6,10 @@ use App\Entity\Base\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table("apartments_slot_reservations")
- * @ORM\Entity(repositoryClass="App\Repository\ApartmentSlotReservationRepository")
+ * @ORM\Table("apartments_reservations")
+ * @ORM\Entity(repositoryClass="App\Repository\ApartmentReservationRepository")
  */
-class ApartmentSlotReservation extends AbstractEntity
+class ApartmentReservation extends AbstractEntity
 {
     /**
      * @var \DateTime
@@ -24,9 +24,16 @@ class ApartmentSlotReservation extends AbstractEntity
     protected $reservationEnd;
 
     /**
-     * @ORM\Column(name="reservation_days", type="integer", options={"default":0})
+     * @var integer
+     * @ORM\Column(name="reservation_days", type="integer", options={"default":1})
      */
-    protected $reservationDays = 0;
+    protected $reservationDays = 1;
+
+    /**
+     * @var integer
+     * @ORM\Column(name="peoples_number", type="integer", options={"default":1})
+     */
+    protected $peoplesNumber = 1;
 
     /**
      * @var float
@@ -53,13 +60,13 @@ class ApartmentSlotReservation extends AbstractEntity
     protected $updatedAt = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations", cascade={"persist"})
-     * @ORM\JoinColumn(name="apartment_slot_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Apartment", inversedBy="reservations", cascade={"persist"})
+     * @ORM\JoinColumn(name="apartment_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $slot;
+    protected $apartment;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ApartmentSlot", inversedBy="reservations", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reservations", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $user;
@@ -155,26 +162,38 @@ class ApartmentSlotReservation extends AbstractEntity
         return $this;
     }
 
-    public function getSlot(): ?ApartmentSlot
+    public function getApartment(): ?Apartment
     {
-        return $this->slot;
+        return $this->apartment;
     }
 
-    public function setSlot(?ApartmentSlot $slot): self
+    public function setApartment(?Apartment $apartment): self
     {
-        $this->slot = $slot;
+        $this->apartment = $apartment;
 
         return $this;
     }
 
-    public function getUser(): ?ApartmentSlot
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?ApartmentSlot $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPeoplesNumber(): ?int
+    {
+        return $this->peoplesNumber;
+    }
+
+    public function setPeoplesNumber(int $peoplesNumber): self
+    {
+        $this->peoplesNumber = $peoplesNumber;
 
         return $this;
     }
