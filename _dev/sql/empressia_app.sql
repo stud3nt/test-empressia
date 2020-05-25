@@ -27,9 +27,10 @@ CREATE TABLE `apartments` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci,
   `slot_day_price` decimal(7,2) NOT NULL DEFAULT '0.00',
+  `slots_count` int(11) NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,71 +39,44 @@ CREATE TABLE `apartments` (
 
 LOCK TABLES `apartments` WRITE;
 /*!40000 ALTER TABLE `apartments` DISABLE KEYS */;
+INSERT INTO `apartments` VALUES (1,'Mieszkanie 1','Mieszkanie 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',64.00,4,'2020-05-25 23:17:29'),(2,'Mieszkanie 2','Mieszkanie 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',60.00,5,'2020-05-25 23:17:29'),(3,'Mieszkanie 3','Mieszkanie 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',57.00,3,'2020-05-25 23:17:29'),(4,'Mieszkanie 4','Mieszkanie 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',47.00,2,'2020-05-25 23:17:29'),(5,'Mieszkanie 5','Mieszkanie 5 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',57.00,4,'2020-05-25 23:17:29'),(6,'Mieszkanie 6','Mieszkanie 6 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',50.00,1,'2020-05-25 23:17:29'),(7,'Mieszkanie 7','Mieszkanie 7 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',71.00,4,'2020-05-25 23:17:29'),(8,'Mieszkanie 8','Mieszkanie 8 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',50.00,5,'2020-05-25 23:17:29'),(9,'Mieszkanie 9','Mieszkanie 9 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',77.00,3,'2020-05-25 23:17:29'),(10,'Mieszkanie 10','Mieszkanie 10 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',57.00,3,'2020-05-25 23:17:29'),(11,'Mieszkanie 11','Mieszkanie 11 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',42.00,2,'2020-05-25 23:17:29'),(12,'Mieszkanie 12','Mieszkanie 12 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',52.00,1,'2020-05-25 23:17:29'),(13,'Mieszkanie 13','Mieszkanie 13 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',50.00,1,'2020-05-25 23:17:29'),(14,'Mieszkanie 14','Mieszkanie 14 Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n                In sit amet gravida purus. Vivamus nec magna quis ipsum imperdiet feugiat vitae ac quam',49.00,4,'2020-05-25 23:17:29');
 /*!40000 ALTER TABLE `apartments` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `apartments_slot_reservations`
+-- Table structure for table `apartments_reservations`
 --
 
-DROP TABLE IF EXISTS `apartments_slot_reservations`;
+DROP TABLE IF EXISTS `apartments_reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `apartments_slot_reservations` (
+CREATE TABLE `apartments_reservations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `apartment_slot_id` int(10) unsigned DEFAULT NULL,
+  `apartment_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
   `reservation_start` date DEFAULT NULL,
   `reservation_end` date DEFAULT NULL,
-  `reservation_days` int(11) NOT NULL DEFAULT '0',
+  `reservation_days` int(11) NOT NULL DEFAULT '1',
+  `peoples_number` int(11) NOT NULL DEFAULT '1',
   `payment_without_discount` decimal(7,2) NOT NULL DEFAULT '0.00',
   `payment_with_discount` decimal(7,2) NOT NULL DEFAULT '0.00',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_3F87AFB0D5D3FF16` (`apartment_slot_id`),
-  KEY `IDX_3F87AFB0A76ED395` (`user_id`),
-  CONSTRAINT `FK_3F87AFB0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `apartments_slots` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `FK_3F87AFB0D5D3FF16` FOREIGN KEY (`apartment_slot_id`) REFERENCES `apartments_slots` (`id`) ON DELETE SET NULL
+  KEY `IDX_A82722FC176DFE85` (`apartment_id`),
+  KEY `IDX_A82722FCA76ED395` (`user_id`),
+  CONSTRAINT `FK_A82722FC176DFE85` FOREIGN KEY (`apartment_id`) REFERENCES `apartments` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_A82722FCA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `apartments_slot_reservations`
+-- Dumping data for table `apartments_reservations`
 --
 
-LOCK TABLES `apartments_slot_reservations` WRITE;
-/*!40000 ALTER TABLE `apartments_slot_reservations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `apartments_slot_reservations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `apartments_slots`
---
-
-DROP TABLE IF EXISTS `apartments_slots`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `apartments_slots` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `apartment_id` int(10) unsigned DEFAULT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_AFC3F3FA176DFE85` (`apartment_id`),
-  CONSTRAINT `FK_AFC3F3FA176DFE85` FOREIGN KEY (`apartment_id`) REFERENCES `apartments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `apartments_slots`
---
-
-LOCK TABLES `apartments_slots` WRITE;
-/*!40000 ALTER TABLE `apartments_slots` DISABLE KEYS */;
-/*!40000 ALTER TABLE `apartments_slots` ENABLE KEYS */;
+LOCK TABLES `apartments_reservations` WRITE;
+/*!40000 ALTER TABLE `apartments_reservations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `apartments_reservations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -125,7 +99,7 @@ CREATE TABLE `migration_versions` (
 
 LOCK TABLES `migration_versions` WRITE;
 /*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
-INSERT INTO `migration_versions` VALUES ('20200525181140','2020-05-25 18:11:44');
+INSERT INTO `migration_versions` VALUES ('20200525211715','2020-05-25 21:17:21');
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,4 +144,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-25 20:14:13
+-- Dump completed on 2020-05-25 23:17:35

@@ -48,6 +48,8 @@ class Apartment extends AbstractEntity
      */
     protected $createdAt = null;
 
+    private $actualPeoplesCount = 0;
+
     public function __construct()
     {
         if (!$this->id) {
@@ -145,6 +147,24 @@ class Apartment extends AbstractEntity
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getActualPeoplesCount(): int
+    {
+        return $this->actualPeoplesCount;
+    }
+
+    /**
+     * @param int $actualPeoplesCount
+     * @return Apartment
+     */
+    public function setActualPeoplesCount(int $actualPeoplesCount): Apartment
+    {
+        $this->actualPeoplesCount = $actualPeoplesCount;
         return $this;
     }
 }
