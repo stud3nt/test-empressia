@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Apartment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,19 @@ class ApartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Apartment::class);
     }
 
-    // /**
-    //  * @return Apartment[] Returns an array of Apartment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getAvailableApartmentsQb(): QueryBuilder
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->_em->createQueryBuilder()
+            ->select('a')
+            ->addSelect('COALESCE(SUM(r.peoplesNumber), 0) as actualPeoplesCount')
+            ->from('App:Apartment', 'a')
+            ->leftJoin(
+                'a.reservations',
+                'r',
+                Expr\Join::WITH,
+                'r.apartment = a AND (r.reservationStart <= :currentDate AND r.reservationEnd >= :currentDate)'
+            )
+            ->setParameter('currentDate', (new \DateTime()))
+            ->groupBy('a.id');
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Apartment
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
