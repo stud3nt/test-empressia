@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Base\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table("apartments_reservations")
@@ -66,16 +67,32 @@ class ApartmentReservation extends AbstractEntity
     protected $apartment;
 
     /**
+     * @var UserInterface|null
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reservations", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $user;
+
+    /** @var string|null */
+    protected $errorMessage = null;
 
     public function __construct()
     {
         if (!$this->id) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'reservationStart' => $this->getReservationStart() ? $this->getReservationStart()->format('Y-m-d') : null,
+            'reservationEnd' => $this->getReservationEnd() ? $this->getReservationEnd()->format('Y-m-d') : null,
+            'reservationDays' => $this->getReservationDays(),
+            'paymentWithoutDiscount' => number_format($this->getPaymentWithoutDiscount(), 2, '.', ''),
+            'paymentWithDiscount' => number_format($this->getPaymentWithDiscount(), 2, '.', ''),
+            'errorMessage' => $this->getErrorMessage()
+        ];
     }
 
     public function getReservationStart(): ?\DateTimeInterface
@@ -174,12 +191,12 @@ class ApartmentReservation extends AbstractEntity
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?UserInterface $user): self
     {
         $this->user = $user;
 
@@ -195,6 +212,24 @@ class ApartmentReservation extends AbstractEntity
     {
         $this->peoplesNumber = $peoplesNumber;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param string $errorMessage
+     * @return ApartmentReservation
+     */
+    public function setErrorMessage(?string $errorMessage): ApartmentReservation
+    {
+        $this->errorMessage = $errorMessage;
         return $this;
     }
 }

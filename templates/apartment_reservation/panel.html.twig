@@ -1,0 +1,135 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12">
+			<h3 class="mt-5">
+				Wynajmij mieszkanie "{{ apartment.name }}"
+			</h3>
+
+			<div class="row">
+				<div class="col-md-12">
+					{{ form_start(reservationForm) }}
+						<div class="form-group">
+							{{ form_label(reservationForm.reservationStart) }}
+							{{ form_widget(reservationForm.reservationStart) }}
+							{{ form_errors(reservationForm.reservationStart) }}
+						</div>
+						<div class="form-group">
+							{{ form_label(reservationForm.reservationEnd) }}
+							{{ form_widget(reservationForm.reservationEnd) }}
+							{{ form_errors(reservationForm.reservationEnd) }}
+						</div>
+						<div class="form-group">
+							{{ form_label(reservationForm.peoplesNumber) }}
+							{{ form_widget(reservationForm.peoplesNumber) }}
+							{{ form_errors(reservationForm.peoplesNumber) }}
+						</div>
+						<p id="reservation-days-info" style="display:none;">
+							Czas trwania wynajmu: <span id="reservation-days"></span> dni
+						</p>
+						<p>
+							Cena za jeden dzień/osoba: {{ apartment.slotDayPrice }} zł
+						</p>
+						<p id="reservation-prices-info" style="display:none;">
+							Cena całkowita: <span id="price-without-discount"></span> <span id="price-with-discount"></span>
+						</p>
+						<p id="reservation-errors"></p>
+						<button type="submit" id="submit-form" class="btn btn-primary">
+							Zarezerwuj
+						</button>
+					{{ form_end(reservationForm) }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<h4 class="mt-5">
+						Aktualnie wynajmujący to mieszkanie:
+					</h4>
+					<ul>
+						{% if activeReservations is iterable and activeReservations is not empty %}
+							{% for activeReservation in activeReservations %}
+								<li>
+									<p>OD: {{ activeReservation.reservationStart }}</p>
+									<p>DO: {{ activeReservation.reservationEnd }}</p>
+									<p>OSOBY: {{ activeReservation.peoplesNumber }}</p>
+								</li>
+							{% endfor %}
+						{% else %}
+							<li>
+								Brak
+							</li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	let apartment = {{ apartment.id }};
+
+    /**
+     * https://stackoverflow.com/a/11339012
+     *
+     * @param $form
+     * @return array
+     */
+    function getFormData($form){
+        let unindexed_array = $form.serializeArray();
+        let indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+
+    function verifyFormData() {
+        let formData = getFormData($('form[name=apartment_reservation_form]'));
+
+        $.ajax({
+            url: Routing.generate('app_apartment_reservation_calculate_reservation_data', {'apartment': apartment}),
+            type: 'POST',
+            dataType: 'json',
+            data: formData,
+            success: function(response) {
+                let paymentWithDiscount = parseFloat(response.paymentWithDiscount);
+                let paymentWithoutDiscount = parseFloat(response.paymentWithoutDiscount);
+                let reservationDays = response.reservationDays;
+
+                $('#submit-form').attr('disabled', (response.errorMessage !== null));
+                $('#reservation-errors').text(response.errorMessage);
+
+                $("#reservation-days-info").toggle(reservationDays > 0 && response.errorMessage === null);
+                $('#reservation-days').text(reservationDays);
+
+                $('#reservation-prices-info').toggle(paymentWithoutDiscount > 0 && response.errorMessage === null);
+                $('#price-without-discount').text(paymentWithoutDiscount + ' zł').css({
+                    'text-decoration':((paymentWithoutDiscount !== paymentWithDiscount) ? 'line-through' : 'none')
+                });
+                $('#price-with-discount').text(paymentWithDiscount + ' zł').toggle((paymentWithoutDiscount !== paymentWithDiscount));
+
+            }
+        });
+    }
+
+	$(document).ready(function() {
+	    $(document).on('change', 'input#{{ reservationForm.reservationStart.vars.id }}', function() {
+	        $('input#{{ reservationForm.reservationEnd.vars.id }}').attr('min', $(this).val())
+	    })
+
+		$(document).on('change', 'form[name=apartment_reservation_form] input', function() {
+		    verifyFormData();
+		});
+
+		$(document).on('keyup', 'form[name=apartment_reservation_form] input', function() {
+		    verifyFormData();
+		});
+	});
+</script>
+{% endblock %}
