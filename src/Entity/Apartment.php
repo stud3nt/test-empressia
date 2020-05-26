@@ -48,7 +48,7 @@ class Apartment extends AbstractEntity
      */
     protected $createdAt = null;
 
-    private $actualPeoplesCount = 0;
+    private $freeSlotsCount = 0;
 
     public function __construct()
     {
@@ -153,18 +153,18 @@ class Apartment extends AbstractEntity
     /**
      * @return int
      */
-    public function getActualPeoplesCount(): int
+    public function getFreeSlotsCount(): int
     {
-        return $this->actualPeoplesCount;
+        return $this->freeSlotsCount;
     }
 
     /**
-     * @param int $actualPeoplesCount
+     * @param int $freeSlotsCount
      * @return Apartment
      */
-    public function setActualPeoplesCount(int $actualPeoplesCount): Apartment
+    public function setFreeSlotsCount(int $freeSlotsCount): Apartment
     {
-        $this->actualPeoplesCount = $actualPeoplesCount;
+        $this->freeSlotsCount = $freeSlotsCount;
         return $this;
     }
 }

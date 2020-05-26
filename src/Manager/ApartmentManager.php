@@ -27,7 +27,7 @@ class ApartmentManager extends EntityManager
             /** @var Apartment $apartment */
             foreach ($rawList as $key => $row) {
                 $apartment = $row[0];
-                $apartment->setActualPeoplesCount($row['actualPeoplesCount']);
+                $apartment->setFreeSlotsCount($apartment->getSlotsCount() - $row['actualPeoplesCount']);
 
                 $apartments[$key] = $apartment;
             }

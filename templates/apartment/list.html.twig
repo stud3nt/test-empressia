@@ -1,0 +1,31 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="mt-5">Lista apartamentów do wynajęcia:</h1>
+
+			<div class="row">
+				{% for apartment in apartments %}
+					<div class="col-md-6 border border-primary">
+						<h4>
+							{{ apartment.name }}
+						</h4>
+						<p>
+							{{ apartment.description }}
+						</p>
+						<p>
+							<b>Cena za jeden pokój:</b> {{ apartment.slotDayPrice }} zł
+						</p>
+						<p>
+							<b>Liczba dostępnych pokoi:</b> {{ apartment.freeSlotsCount }}
+						</p>
+						<a href="{{ path('app_apartment_reservation_panel', {'apartment':apartment.id}) }}" class="btn btn-secondary">
+							ZAMÓW
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
