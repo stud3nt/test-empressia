@@ -8,6 +8,7 @@ use App\Entity\ApartmentReservation;
 use App\Form\ApartmentReservationForm;
 use App\Manager\ApartmentReservationManager;
 use App\Repository\ApartmentReservationRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +23,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApartmentReservationController extends BaseController
 {
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/apartment/{apartment}", methods={"GET", "POST"}, name="panel")
      */
     public function panel(
-        Apartment $apartment, Request $request,
+        Apartment $apartment,
+        Request $request,
         ApartmentReservationRepository $apartmentReservationRepository,
         ApartmentReservationManager $apartmentReservationManager)
     {
@@ -39,9 +42,12 @@ class ApartmentReservationController extends BaseController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $reservation->setUser($this->getUser());
+                $apartmentReservationManager->calculateReservationPrices($reservation);
                 $apartmentReservationManager->save($reservation);
 
-                return new RedirectResponse($this->generateUrl(''));
+                return new RedirectResponse($this->generateUrl('app_apartment_reservation_summary', [
+                    'apartment' => $apartment->getId()
+                ]));
             }
         }
 
@@ -51,6 +57,17 @@ class ApartmentReservationController extends BaseController
             'apartment' => $apartment,
             'activeReservations' => $activeReservations,
             'reservationForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/summary/{apartment}", methods={"GET"}, name="summary")
+     */
+    public function summary(Apartment $apartment)
+    {
+        return $this->render('apartment_reservation/summary.html.twig', [
+            'apartment' => $apartment,
         ]);
     }
 

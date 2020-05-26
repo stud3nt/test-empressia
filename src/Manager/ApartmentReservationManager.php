@@ -24,19 +24,20 @@ class ApartmentReservationManager extends EntityManager
             $apartmentReservation->getReservationEnd()
         );
 
+        $apartment = $apartmentReservation->getApartment();
         $currentPeoplesNumber = 0;
 
         if ($activeReservations) {
             foreach ($activeReservations as $activeReservation)
-                $currentPeoplesNumber += $activeReservation->getPeoplesNumber();
+                $currentPeoplesNumber += $activeReservation['peoplesNumber'];
 
-            if ($currentPeoplesNumber > $apartmentReservation->getPeoplesNumber())
+            if (($currentPeoplesNumber + $apartmentReservation->getPeoplesNumber()) > $apartment->getSlotsCount())
                 $apartmentReservation->setErrorMessage('Twoja rezerwacja koliduje z innymi :(');
         }
 
         $this->calculateReservationPrices($apartmentReservation);
 
-        if ($apartmentReservation->getApartment()->getSlotsCount() < $apartmentReservation->getPeoplesNumber())
+        if ($apartment->getSlotsCount() < $apartmentReservation->getPeoplesNumber())
             $apartmentReservation->setErrorMessage('Mieszkanie nie posiada dostatecznej liczby miejsc :(');
 
 

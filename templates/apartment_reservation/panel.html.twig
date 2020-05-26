@@ -51,9 +51,15 @@
 						{% if activeReservations is iterable and activeReservations is not empty %}
 							{% for activeReservation in activeReservations %}
 								<li>
-									<p>OD: {{ activeReservation.reservationStart }}</p>
-									<p>DO: {{ activeReservation.reservationEnd }}</p>
-									<p>OSOBY: {{ activeReservation.peoplesNumber }}</p>
+									<p>
+										<b>OD:</b> {{ activeReservation.reservationStart | date('Y-m-d') }}
+									</p>
+									<p>
+										<b>DO</b> {{ activeReservation.reservationEnd | date('Y-m-d') }}
+									</p>
+									<p>
+										<b>LICZBA OSÓB:</b> {{ activeReservation.peoplesNumber }}
+									</p>
 								</li>
 							{% endfor %}
 						{% else %}

@@ -18,10 +18,10 @@
 							<b>Cena za jeden dzień/osoba:</b> {{ apartment.slotDayPrice }} zł
 						</p>
 						<p>
-							<b>Liczba dostępnych pokoi:</b> {{ apartment.freeSlotsCount }}
+							<b>Liczba miejsc dostępna teraz:</b> {{ apartment.freeSlotsCount }}
 						</p>
 						<a href="{{ path('app_apartment_reservation_panel', {'apartment':apartment.id}) }}" class="btn btn-secondary">
-							ZAMÓW
+							WYNAJMIJ
 						</a>
 					</div>
 				{% endfor %}

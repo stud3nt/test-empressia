@@ -1,0 +1,15 @@
+{% extends 'skeleton.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12">
+			<h3 class="mt-5">
+				Mieszkanie "{{ apartment.name }}" zostało przez Ciebie wynajęte.
+			</h3>
+
+			<a href="{{ path('app_apartment_index') }}" class="btn btn-primary">
+				Powrót do strony głównej
+			</a>
+		</div>
+	</div>
+{% endblock %}
